@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -30,6 +30,26 @@ func TestHomeHandler(t *testing.T) {
 	a.Router.ServeHTTP(rr, req)
 
 	// Assert
-	assert.Equal(t, http.StatusOK, rr.Code)
-	assert.Equal(t, "{}", rr.Body.String())
+	assert := assert.New(t)
+	assert.Equal(http.StatusOK, rr.Code)
+	assert.Equal("{}", rr.Body.String())
+}
+
+func TestEmptyEntryList(t *testing.T) {
+	// Arrange
+	req, err := http.NewRequest("GET", "/entries", nil)
+	if err != nil {
+			t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+
+	// Act
+	a.Router.ServeHTTP(rr, req)
+
+	// Assert
+	assert := assert.New(t)
+	assert.Equal(http.StatusOK, rr.Code)
+	var entries []Entry
+	json.Unmarshal([]byte(rr.Body.String()), &entries)
+	assert.Equal(len(entries), 0)
 }

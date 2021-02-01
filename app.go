@@ -18,6 +18,7 @@ type App struct {
 func (a *App) Initialize() {
 	a.Router = mux.NewRouter()
 	a.Router.HandleFunc("/", HomeHandler)
+	a.Router.HandleFunc("/entries", EntriesHandler)
 }
 
 // Run ...
@@ -30,4 +31,11 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	io.WriteString(w, `{}`)
+}
+
+// EntriesHandler ...
+func EntriesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	io.WriteString(w, `[]`)
 }

@@ -1,6 +1,9 @@
 package main
 
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
 // EntryType Enum
 type EntryType int
@@ -16,9 +19,9 @@ const (
 
 // Entry ...
 type Entry struct {
-	ID 		int 		`json: "id"`
-	Type 	EntryType 	`json: "type"`
-
+	ID 		int 			`json: "id"`
+	Type 	EntryType `json: "type"`
+	Date 	time.Time	`json: "date"`
 }
 
 func (p *Entry) getEntry() error {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -12,13 +13,18 @@ import (
 // App ...
 type App struct {
 	Router *mux.Router
+	Entries []Entry
 }
 
 // Initialize ...
 func (a *App) Initialize() {
 	a.Router = mux.NewRouter()
 	a.Router.HandleFunc("/", HomeHandler)
-	a.Router.HandleFunc("/entries", EntriesHandler)
+	a.Router.HandleFunc("/entries", a.EntriesHandler)
+
+	a.Entries = []Entry{}
+	// entry := Entry{ ID: 1, Type: HighFlow, Date: time.Now()}
+	// a.Entries = append(a.Entries, entry)
 }
 
 // Run ...
@@ -34,8 +40,9 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // EntriesHandler ...
-func EntriesHandler(w http.ResponseWriter, r *http.Request) {
+func (a *App) EntriesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	io.WriteString(w, `[]`)
+	jsonEntries, _ := json.Marshal(a.Entries)
+	io.WriteString(w, string(jsonEntries))
 }

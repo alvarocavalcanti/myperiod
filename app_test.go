@@ -22,7 +22,7 @@ func TestHomeHandler(t *testing.T) {
 	// Arrange
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
-			t.Fatal(err)
+		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
 
@@ -39,7 +39,7 @@ func TestEmptyEntryList(t *testing.T) {
 	// Arrange
 	req, err := http.NewRequest("GET", "/entries", nil)
 	if err != nil {
-			t.Fatal(err)
+		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
 
@@ -51,5 +51,5 @@ func TestEmptyEntryList(t *testing.T) {
 	assert.Equal(http.StatusOK, rr.Code)
 	var entries []Entry
 	json.Unmarshal([]byte(rr.Body.String()), &entries)
-	assert.Equal(len(entries), 0)
+	assert.Equal(0, len(entries))
 }

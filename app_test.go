@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -52,4 +53,25 @@ func TestEmptyEntryList(t *testing.T) {
 	var entries []Entry
 	json.Unmarshal([]byte(rr.Body.String()), &entries)
 	assert.Equal(0, len(entries))
+}
+
+func TestSingleItemEntryList(t *testing.T) {
+	// Arrange
+	req, err := http.NewRequest("GET", "/entries", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	entry := Entry{ID: 1, Type: HighFlow, Date: time.Now()}
+	a.Entries = append(a.Entries, entry)
+
+	// Act
+	a.Router.ServeHTTP(rr, req)
+
+	// Assert
+	assert := assert.New(t)
+	assert.Equal(http.StatusOK, rr.Code)
+	var entries []Entry
+	json.Unmarshal([]byte(rr.Body.String()), &entries)
+	assert.Equal(1, len(entries))
 }

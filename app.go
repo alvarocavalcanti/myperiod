@@ -23,8 +23,6 @@ func (a *App) Initialize() {
 	a.Router.HandleFunc("/entries", a.EntriesHandler)
 
 	a.Entries = []Entry{}
-	// entry := Entry{ ID: 1, Type: HighFlow, Date: time.Now()}
-	// a.Entries = append(a.Entries, entry)
 }
 
 // Run ...
